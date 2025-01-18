@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {lazy} from 'react'
 import Slider from 'react-slick';
-import ReUseNavBar from '../reusecomponents/reUseNavBar'
-import ReUseFooter from '../reusecomponents/reUseFooter'
-import "../App.css"
+import "./home.css"
+
+let NavBar = lazy(()=>import("../../components/navBar/NavBar"))
+let Footer = lazy(()=>import("../../components/footer/Footer"))
 
 
 const Home = () => {
@@ -175,7 +176,7 @@ const Home = () => {
 
 
       {/* navbar */}
-       <ReUseNavBar />
+       <NavBar />
        {/* navbar end */}
 
 
@@ -1121,7 +1122,7 @@ const Home = () => {
 
 
         {/* footer */}
-       <ReUseFooter />
+       <Footer />
        {/* footer end    */}
 
         

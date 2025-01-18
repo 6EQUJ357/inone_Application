@@ -1,28 +1,61 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { getCompanyData } from '../../pages/contact/contactService/contactService'
+import { logoutCustomer } from '../../pages/Auth/authService/authService'
 
 
-const ReUseNavBar = () => {
+const NavBar = () => {
+
+    const navigate = useNavigate();
+       const [companyData, setCompanyData] = useState([]);
+
+
+       // verify dashboard
+           useEffect(()=>{ 
+            const fetchData = async () => { 
+                try{
+                    
+                        //get company data
+                        const companyDetails = await getCompanyData();
+                        await setCompanyData(companyDetails.companyData);
+                       //console.log("date received", companyDetails.companyData);
+                    
+                }
+                catch(error){
+        
+                    console.error(error);
+                }
+            };
+        
+            fetchData();  
+            }, [])
+
+
+            const logouthandle = async () => {
+                await logoutCustomer();
+                navigate("/registration_login");
+              };
   return (
     <div>
          {/* Navbar start */}
          <div className="container-fluid fixed-top">
             <div className="container topbar bg-primary d-none d-lg-block">
+
                 <div className="d-flex justify-content-between">
                     <div className="top-info ps-2">
-                        <small className="me-3"><i className="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" className="text-white">Tangellamudi, ELURU</a></small>
-                        <small className="me-3"><i className="fas fa-envelope me-2 text-secondary"></i><a href="mailto:inone@gmail.com" className="text-white">inone@gmail.com</a></small>
+                        <small className="me-3"><i className="fas fa-map-marker-alt me-2 text-secondary"></i> <Link to="/contact" className="text-white">{companyData ? companyData.map(res=>res.companyAddress) : "Loading..."}</Link></small>
+                        <small className="me-3"><i className="fas fa-envelope me-2 text-secondary"></i><a href={`mailto:${companyData && companyData.map(res=>res.companyEmail)}`} className="text-white">{companyData ? companyData.map(res=>res.companyEmail) : "Loading..."}</a></small>
                     </div>
-                    <div className="top-link pe-2">
+                    {/* <div className="top-link pe-2">
                         <a href="" className="text-white"><small className="text-white mx-2">Privacy Policy</small>/</a>
                         <a href="" className="text-white"><small className="text-white mx-2">Terms of Use</small>/</a>
                         <a href="" className="text-white"><small className="text-white ms-2">Sales and Refunds</small></a>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="container px-0">
                 <nav className="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="index.html" className="navbar-brand"><h1 className="text-primary display-6">In One</h1></a>
+                    <Link to="/" className="navbar-brand"><h1 className="text-primary display-6">{companyData ? companyData.map(res=>res.companyName) : "Loading..."}</h1></Link>
                     <button className="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span className="fa fa-bars text-primary"></span>
                     </button>
@@ -74,11 +107,19 @@ const ReUseNavBar = () => {
                                 <i className="fas fa-user fa-2x"></i>
                                 </a>
                                 </a>
+
                                 <div className="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <Link to="/registration_login" className="dropdown-item">Login</Link>
-                                    <Link to="*" className="dropdown-item">Log out</Link>
+
+                                {localStorage.getItem("customertoken") ? 
+                                <>
+                                    <Link onClick={logouthandle} className="dropdown-item">Log out</Link>
                                     <Link to="/account" className="dropdown-item">My Account</Link>
+                                </>
+                                    :
+                                    <Link to="/registration_login" className="dropdown-item">Login</Link>
+                                }
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -110,4 +151,4 @@ const ReUseNavBar = () => {
   )
 }
 
-export default ReUseNavBar
+export default NavBar

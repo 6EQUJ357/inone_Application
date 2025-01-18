@@ -1,19 +1,25 @@
-import React from 'react'
+import React, {lazy} from 'react'
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
 
 
-import Home from './components/home'
-import Products from './components/products'
-import Wishlist from './components/wishlist'
-import About from './components/about'
-import Cart from './components/cart'
-import Checkout from './components/checkout'
-import Contact from './components/contact'
-import Notfound from './components/notfound'
-import Product_details from './components/product_details'
 
-import Registration_login from './Auth/registration_login'
-import Account from './Auth/account'
+
+//Auth
+let Registration_login = lazy(()=>import("./pages/Auth/registration_login"))
+let Account = lazy(()=>import("./pages/Auth/account"))
+
+
+
+//pages
+let Home = lazy(()=>import("./pages/home/home"))
+let Products = lazy(()=>import("./pages/products/products"))
+let Wishlist = lazy(()=>import("./pages/wishlist/wishlist"))
+let About = lazy(()=>import("./pages/about/about"))
+let Cart = lazy(()=>import("./pages/cart/cart"))
+let Checkout = lazy(()=>import("./pages/checkout/checkout"))
+let Contact = lazy(()=>import("./pages/contact/contact"))
+let Product_details = lazy(()=>import("./pages/products/product_details"))
+let Notfound = lazy(()=>import("./pages/notFound/notfound"))
 
 
 
@@ -23,6 +29,16 @@ const App = () => {
     <BrowserRouter> 
       <Routes>
 
+
+        {/* Auth */}
+
+        <Route path='/registration_login' element={<Registration_login/>}/>
+
+
+        <Route path='/account' element={<Account/>}/>
+
+
+        {/* pages */}
         <Route path="/" element={<Home />}/>
 
         <Route path='/products' element={<Products/>}/>
@@ -37,17 +53,9 @@ const App = () => {
 
         <Route path='/contact' element={<Contact/>}/>
 
-        <Route path="*" element={<Notfound />}/>
-
         <Route path='/product_details' element={<Product_details/>}/>
 
-        
-      {/* Auth */}
-
-        <Route path='/registration_login' element={<Registration_login/>}/>
-
-
-        <Route path='/account' element={<Account/>}/>
+        <Route path="*" element={<Notfound />}/>   
         
       </Routes>
     </BrowserRouter>

@@ -1,25 +1,27 @@
-import React from 'react'
-import ReUseFooter from '../reusecomponents/reUseFooter'
-import ReUseNavBar from '../reusecomponents/reUseNavBar'
+import React, {lazy} from 'react'
+import { Link } from 'react-router-dom'
 
 
-const Cart = () => {
+let NavBar = lazy(()=>import("../../components/navBar/NavBar"))
+let Footer = lazy(()=>import("../../components/footer/Footer"))
+
+
+const Wishlist = () => {
   return (
     <div>
 
-
-        {/* navbar */}
-        < ReUseNavBar/>
+    {/* navbar */}
+    < NavBar/>
         {/* navbar end */}
 
 
         {/* Single Page Header start */}
         <div className="container-fluid page-header py-5">
-            <h1 className="text-center text-white display-6">Cart</h1>
+            <h1 className="text-center text-white display-6">Wishlist</h1>
             <ol className="breadcrumb justify-content-center mb-0">
-                <li className="breadcrumb-item"><a href="#">Home</a></li>
-                <li className="breadcrumb-item"><a href="#">Pages</a></li>
-                <li className="breadcrumb-item active text-white">Cart</li>
+                <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                <li className="breadcrumb-item"><Link to="/cart">Cart</Link></li>
+                <li className="breadcrumb-item active text-white">Wishlist</li>
             </ol>
         </div>
         {/* Single Page Header End */}
@@ -153,7 +155,7 @@ const Cart = () => {
                         </tbody>
                     </table>
                 </div>
-                <div className="mt-5">
+                {/* <div className="mt-5">
                     <input type="text" className="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code" />
                     <button className="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
                 </div>
@@ -182,19 +184,20 @@ const Cart = () => {
                             <button className="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
         {/* Cart Page End */}
 
 
         {/* footer */}
-        < ReUseFooter/>
+        < Footer/>
         {/* footer end */}
+
 
 
     </div>
   )
 }
 
-export default Cart
+export default Wishlist

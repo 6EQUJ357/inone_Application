@@ -1,6 +1,7 @@
-import React from 'react'
-import ReUseFooter from '../reusecomponents/reUseFooter'
-import ReUseNavBar from '../reusecomponents/reUseNavBar'
+import React, {lazy} from 'react'
+
+let NavBar = lazy(()=>import("../../components/navBar/NavBar"))
+let Footer = lazy(()=>import("../../components/footer/Footer"))
 
 const Account = () => {
   return (
@@ -8,7 +9,7 @@ const Account = () => {
 
   
         {/* navbar */}
-        <ReUseNavBar/>
+        <NavBar/>
         {/* navbar end */}
 
         {/* Single Page Header start */}
@@ -212,7 +213,7 @@ const Account = () => {
 
 
          {/* footer */}
-         < ReUseFooter/>
+         < Footer/>
         {/* footer end */}
 
 
