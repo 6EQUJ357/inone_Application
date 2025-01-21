@@ -91,15 +91,27 @@ export const loginCustomer = async (values) => {
 
   // Logout User
   export const logoutCustomer = async () => {
+    
     try {
-      let response = await axios.get(`${BACKEND_URL}/api/customer/logout`);
-      //console.log("logout", response);
+      let response = await axios.get(`${BACKEND_URL}/api/customer/logout`,{
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("customertoken")}` 
+        }
+      });
+      
+
+      if(response.data.status === 400){
+        toast.error(response.data.message);
+        // alert(response.data.message);
+        }
 
       if(response.data.status === 200){
-        localStorage.clear();
         toast.success(response.data.message);
-       // console.log("tott", response.data);     
-  
+        localStorage.clear();
+        //1 seconds to reload
+      setTimeout(function() {
+        window.location.reload(true); // Reload from server
+      }, 1000);
         }
 
     } catch (error) {
@@ -112,34 +124,38 @@ export const loginCustomer = async (values) => {
   };
 
 
-  //get admin data
-  export const getCustomerData = async () => {
+  //get customer data
+//   export const getCustomerData = async () => {
 
-  try {
+//   try {
 
-    const response =await axios.get(`${BACKEND_URL}/api/customer/getcustomerdata`);
-    //console.log("responsssssse", response.data);
+//     const response =await axios.get(`${BACKEND_URL}/api/customer/getcustomerdata`, {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("customertoken")}` 
+//       }
+//     });
+//     //console.log("responsssssse", response.data);
 
-    if(response.data.status === 400){
-      toast.error(response.data.message);
-      // alert(response.data.message);
-      }
+//     if(response.data.status === 400){
+//       toast.error(response.data.message);
+//       // alert(response.data.message);
+//       }
 
-      if(response.data.status === 200){
-        return response.data;	
+//       if(response.data.status === 200){
+//         return response.data;	
       
   
-        }
+//         }
 
    
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
-    toast.error(message);
-  }
-};
+//   } catch (error) {
+//     const message =
+//       (error.response && error.response.data && error.response.data.message) ||
+//       error.message ||
+//       error.toString();
+//     toast.error(message);
+//   }
+// };
 
 
 

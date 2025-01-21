@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as Yup from "yup"
 import { registerCustomer, loginCustomer } from './authService/authService'
+import { SET_CUSTOMER } from '../../redux/reducers/Slices/AuthSlice'
+import { useDispatch, useSelector } from "react-redux";
 
 
 let NavBar = lazy(()=>import("../../components/navBar/NavBar"))
@@ -14,6 +16,8 @@ let Footer = lazy(()=>import("../../components/footer/Footer"))
 const Registration_login = () => {
 
 	const navigate = useNavigate();
+
+	const dispatch = useDispatch();
 
 	//signup  formik_signUp
 
@@ -37,12 +41,11 @@ const Registration_login = () => {
  
             try{
                 const data = await registerCustomer(values);
-                //console.log("date received", data.Admin);
+                //console.log("date received", data.customerData);
 
-                navigate("/registration_login");
-
-				 // Reset the form after successful submission
-				 resetForm(); 
+				// Reset the form after successful submission
+				resetForm(); 
+				
 
             }
             catch(error){
@@ -76,14 +79,14 @@ const Registration_login = () => {
  
             try{
                 const data = await loginCustomer(values);
-                //console.log("date received", data.customerData);
+                console.log("date received", data.customerData);
 
                 
 				if(localStorage.getItem("customertoken")){
 
-					//await dispatch(SET_ADMIN(data.Admin));
+					await dispatch(SET_CUSTOMER(data.customerData));
 
-				   navigate("/");
+					navigate("/");
 				}
 
             }

@@ -2,12 +2,27 @@ import React, {useState, useEffect} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getCompanyData } from '../../pages/contact/contactService/contactService'
 import { logoutCustomer } from '../../pages/Auth/authService/authService'
+import { useSelector } from 'react-redux'
+import { getCartData } from '../../pages/cart/cartService/cartService'
 
 
 const NavBar = () => {
 
     const navigate = useNavigate();
        const [companyData, setCompanyData] = useState([]);
+
+
+    //    customer data form store
+       const customerData = useSelector((state) => state.Reducer.auth.customer);
+       //console.log("customerData from store", customerData)
+
+    //    //cart length from store
+    //    const cartLength = useSelector((state) => state.Reducer.cart.cartItems);
+    //           console.log("cart", cartLength)
+
+            // all cart state value
+          const [items, setItems] = useState([]);
+
 
 
        // verify dashboard
@@ -19,6 +34,14 @@ const NavBar = () => {
                         const companyDetails = await getCompanyData();
                         await setCompanyData(companyDetails.companyData);
                        //console.log("date received", companyDetails.companyData);
+
+
+                       if(localStorage.getItem("customertoken")){
+                        //get product data
+                        const cartDetails = await getCartData();
+                        await setItems(cartDetails.cartData);
+                        //console.log("date cart received", cartDetails.cartData); 
+                       }
                     
                 }
                 catch(error){
@@ -31,10 +54,12 @@ const NavBar = () => {
             }, [])
 
 
-            const logouthandle = async () => {
-                await logoutCustomer();
-                navigate("/registration_login");
-              };
+    //handle logour fonction
+    const logouthandle = async () => {
+        await logoutCustomer();
+        };
+
+
   return (
     <div>
          {/* Navbar start */}
@@ -46,6 +71,13 @@ const NavBar = () => {
                         <small className="me-3"><i className="fas fa-map-marker-alt me-2 text-secondary"></i> <Link to="/contact" className="text-white">{companyData ? companyData.map(res=>res.companyAddress) : "Loading..."}</Link></small>
                         <small className="me-3"><i className="fas fa-envelope me-2 text-secondary"></i><a href={`mailto:${companyData && companyData.map(res=>res.companyEmail)}`} className="text-white">{companyData ? companyData.map(res=>res.companyEmail) : "Loading..."}</a></small>
                     </div>
+
+
+                    <div className="top-link pe-2">
+                        <span className="text-white"><small className="text-white mx-2">Welcome Back <span style={{fontWeight : "bolder", fontSize : "1rem", color : "#ffb524"}}>{customerData?.customerName}</span></small></span>
+                    </div>
+
+
                     {/* <div className="top-link pe-2">
                         <a href="" className="text-white"><small className="text-white mx-2">Privacy Policy</small>/</a>
                         <a href="" className="text-white"><small className="text-white mx-2">Terms of Use</small>/</a>
@@ -65,7 +97,7 @@ const NavBar = () => {
                             <Link to="/about" className="nav-item nav-link">About</Link>
                             <Link to="/products" className="nav-item nav-link">Products</Link>
                             <Link to="/contact" className="nav-item nav-link">Contact</Link>
-                            <Link to="/wishlist" className="nav-item nav-link"> <i class="fa fa-regular fa-heart"></i> Wishlist</Link>
+                            <Link to="/wishlist" className="nav-item nav-link"> <i class="fa fa-regular fa-heart" style={{color:"#81c408"}}></i> Wishlist</Link>
                             
 
                             {/* <div className="nav-item dropdown">
@@ -95,8 +127,9 @@ const NavBar = () => {
 
                             <Link to ="/cart" className="position-relative me-4 my-auto">
                                 <i className="fa fa-shopping-bag fa-2x"></i>
-                                <span className="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style={{top: "-5px", left: "15px", height: "20px", minWidth: "20px"}}>3</span>
+                                <span className="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style={{top: "-5px", left: "15px", height: "20px", minWidth: "20px"}}>{items ? items.length : 0}</span>
                             </Link>
+
 
                             {/* <a href="#" className="my-auto">
                                 <i className="fas fa-user fa-2x"></i>

@@ -3,7 +3,9 @@ import Slider from 'react-slick';
 import { Link, useLocation } from 'react-router-dom';
 import { BACKEND_URL } from '../../config/config';
 import "./product.css"
+import { useSelector } from 'react-redux';
 import { cartForm } from '../cart/cartService/cartService';
+
 
 
 let NavBar = lazy(()=>import("../../components/navBar/NavBar"))
@@ -15,11 +17,14 @@ let Footer = lazy(()=>import("../../components/footer/Footer"))
 const Product_details = () => {
 
 
+    // customer data form store
+    const customerData = useSelector((state) => state.Reducer.auth.customer);
+    //console.log("customerData from store", customerData)
     
     let location = useLocation();
   
     const productDetails = location.state;  
-    console.log("productDetails", productDetails);
+    //console.log("productDetails", productDetails);
 
 
     //images
@@ -44,23 +49,25 @@ const Product_details = () => {
 			productCategory : productDetails.productCategory, 
 			productPrice : productDetails.productPrice,
             productWeight : productDetails.productWeight,
-            customerName : "abhi",
-			customerMobile_NO :  "0000012345"
+            customerName : customerData.customerName,
+			customerMobile_NO : customerData.customerMobile_NO
         }
 
-        console.log("cartObj", cartObj);
+        //console.log("cartObj", cartObj);
 
 
-        // try{
-        //     const data = await cartForm(cartObj);
-        //     //console.log("product form", data.productData);
-        //    // navigate("/productlist");
+        try{
 
-        // }
-        // catch(error){
+         
+            const data = await cartForm(cartObj);
+            //console.log("product form", data.cartData);
+           // navigate("/productlist");
 
-        //     console.error(error);
-        // }
+        }
+        catch(error){
+
+            console.error(error);
+        }
 
 
       }

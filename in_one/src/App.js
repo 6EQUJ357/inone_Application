@@ -1,8 +1,10 @@
-import React, {lazy} from 'react'
+import React, {lazy, Suspense} from 'react'
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
 
 
 
+//protect route
+import ProtectedRoute from './customHooks/ProtectedRoute/ProtectedRoute';
 
 //Auth
 let Registration_login = lazy(()=>import("./pages/Auth/registration_login"))
@@ -21,44 +23,61 @@ let Contact = lazy(()=>import("./pages/contact/contact"))
 let Product_details = lazy(()=>import("./pages/products/product_details"))
 let Notfound = lazy(()=>import("./pages/notFound/notfound"))
 
+//payment
+const PaymentSuccessCard = lazy(()=>import("./pages/successPaymentCard/successPaymentCard"))
+
 
 
 
 const App = () => {
   return (
-    <BrowserRouter> 
-      <Routes>
+    <Suspense fallback={
+    <div id="spinner" className="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+        <div className="spinner-grow text-primary" role="status"></div>
+    </div>
+    }>
+
+      <BrowserRouter> 
+        <Routes>
 
 
-        {/* Auth */}
+          {/* Auth */}
 
-        <Route path='/registration_login' element={<Registration_login/>}/>
-
-
-        <Route path='/account' element={<Account/>}/>
+          <Route path='/registration_login' element={<Registration_login/>}/>
 
 
-        {/* pages */}
-        <Route path="/" element={<Home />}/>
+          <Route path='/account' element={<ProtectedRoute><Account/></ProtectedRoute>}/>
+  
 
-        <Route path='/products' element={<Products/>}/>
+          {/* pages */}
+          <Route path="/" element={<Home />}/>
 
-        <Route path="/about" element={<About />}/>
+          <Route path='/products' element={<Products/>}/>
 
-        <Route path="/wishlist" element={<Wishlist />}/>
+          <Route path="/about" element={<About />}/>
 
-        <Route path='/cart' element={<Cart/>}/>
+          <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>}/>
 
-        <Route path="/checkout" element={<Checkout />}/>
+          <Route path='/cart' element={<ProtectedRoute><Cart/></ProtectedRoute>}/>
 
-        <Route path='/contact' element={<Contact/>}/>
+          <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>}/>
 
-        <Route path='/product_details' element={<Product_details/>}/>
+          <Route path='/contact' element={<Contact/>}/>
 
-        <Route path="*" element={<Notfound />}/>   
-        
-      </Routes>
-    </BrowserRouter>
+          <Route path='/product_details' element={<Product_details/>}/>
+
+
+          {/* payment */}
+          <Route path='/successpayment' element={<ProtectedRoute><PaymentSuccessCard/></ProtectedRoute>}/>
+
+
+
+          <Route path="*" element={<Notfound />}/>   
+          
+        </Routes>
+      </BrowserRouter>
+
+    </Suspense>
     
   )
 } 
